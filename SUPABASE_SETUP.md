@@ -78,10 +78,13 @@ This guide will help you integrate Supabase with your Scheduler App to store eve
    npm run build
    ```
 
-2. **Deploy to AWS**:
-   ```bash
-   aws s3 sync build/ s3://mikek-scheduler-app-2024 --delete --profile MikePersonal
-   ```
+2. **Deploy to Vercel**:
+   - Push your code to GitHub
+   - Connect your repository to [Vercel](https://vercel.com)
+   - Add environment variables in Vercel dashboard:
+     - `REACT_APP_SUPABASE_URL`
+     - `REACT_APP_SUPABASE_ANON_KEY`
+   - Vercel will automatically deploy your app
 
 ## Database Schema
 

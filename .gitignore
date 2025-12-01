@@ -47,10 +47,9 @@ ehthumbs.db
 Thumbs.db
 Desktop.ini
 
-# AWS/Supabase
+# Security keys
 *.pem
 *.key
-.aws/
 
 # Temporary files
 *.tmp

@@ -106,17 +106,21 @@ Supabase connection error: [error details]
 
 ### Step 7: Deploy with Environment Variables
 
-When deploying to AWS, you need to set environment variables in the build:
+When deploying to Vercel, you need to set environment variables in the Vercel dashboard:
 
-1. **Build with environment variables**:
+1. **Build your app**:
    ```bash
    npm run build
    ```
 
-2. **Deploy to AWS**:
-   ```bash
-   aws s3 sync build/ s3://mikek-scheduler-app-2024 --delete --profile MikePersonal
-   ```
+2. **Deploy to Vercel**:
+   - Push your code to GitHub
+   - Connect your repository to [Vercel](https://vercel.com)
+   - Go to **Project Settings** → **Environment Variables**
+   - Add the following variables:
+     - `REACT_APP_SUPABASE_URL` = your Supabase project URL
+     - `REACT_APP_SUPABASE_ANON_KEY` = your Supabase anon key
+   - Redeploy your application
 
 ### Quick Fix Commands
 
@@ -139,6 +143,7 @@ npm start
 4. **Test with curl** - Try direct API calls
 
 Let me know what you see in the browser console and I'll help you fix it!
+
 
 
 

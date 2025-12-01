@@ -41,9 +41,9 @@ npm run build
 
 This builds the app for production to the `build` folder.
 
-## AWS Deployment
+## Deployment
 
-This application is designed to be deployed to AWS S3 with CloudFront for optimal performance.
+This application is designed to be deployed to Vercel for optimal performance and ease of deployment.
 
 ### Deployment Steps
 
@@ -52,21 +52,27 @@ This application is designed to be deployed to AWS S3 with CloudFront for optima
    npm run build
    ```
 
-2. **Create an S3 bucket** for hosting the static files
+2. **Deploy to Vercel**:
+   - Push your code to GitHub
+   - Connect your repository to Vercel
+   - Vercel will automatically detect React and configure the build settings
+   - Add environment variables in Vercel dashboard if needed:
+     - `REACT_APP_SUPABASE_URL`
+     - `REACT_APP_SUPABASE_ANON_KEY`
 
-3. **Upload the build folder** contents to your S3 bucket
+3. **Custom Domain** (optional):
+   - Add your custom domain in Vercel dashboard
+   - Configure DNS records as instructed by Vercel
+   - SSL certificates are automatically provisioned
 
-4. **Configure CloudFront** for global distribution and HTTPS
+### Vercel Benefits
 
-5. **Set up Route 53** for custom domain (optional)
-
-### AWS Infrastructure
-
-The application can be deployed using:
-- **S3**: Static website hosting
-- **CloudFront**: CDN for global distribution
-- **Route 53**: DNS management (optional)
-- **ACM**: SSL certificate management
+- **Automatic deployments** from Git pushes
+- **Global CDN** for fast loading worldwide
+- **HTTPS/SSL** automatically configured
+- **Preview deployments** for pull requests
+- **Environment variables** management
+- **Zero configuration** for React apps
 
 ## Usage
 

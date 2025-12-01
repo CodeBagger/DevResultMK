@@ -48,7 +48,7 @@ const saveLocalEvents = (events: Event[]) => {
 
 // Event service class
 export class EventService {
-  // Get all events
+  // Get all events for the current user
   static async getEvents(): Promise<Event[]> {
     // If Supabase is not configured, use localStorage
     if (!isSupabaseConfigured || !supabase) {
@@ -57,9 +57,18 @@ export class EventService {
     }
 
     try {
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        // If no user is logged in, return empty array
+        return [];
+      }
+
       const { data, error } = await supabase
         .from('events')
         .select('*')
+        .eq('user_id', user.id)
         .order('start', { ascending: true });
 
       if (error) {
@@ -92,7 +101,17 @@ export class EventService {
     }
 
     try {
-      const supabaseEvent = convertToSupabase(event);
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        throw new Error('User must be authenticated to create events');
+      }
+
+      const supabaseEvent = {
+        ...convertToSupabase(event),
+        user_id: user.id
+      };
       
       const { data, error } = await supabase
         .from('events')
@@ -202,9 +221,18 @@ export class EventService {
     }
 
     try {
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        // If no user is logged in, return empty array
+        return [];
+      }
+
       const { data, error } = await supabase
         .from('events')
         .select('*')
+        .eq('user_id', user.id)
         .gte('start', startDate.toISOString())
         .lte('end', endDate.toISOString())
         .order('start', { ascending: true });

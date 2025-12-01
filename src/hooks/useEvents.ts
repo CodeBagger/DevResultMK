@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Event } from '../types/Event';
 import { EventService } from '../services/eventService';
+import { useAuth } from '../contexts/AuthContext';
 
 export const useEvents = () => {
+  const { user } = useAuth();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -63,10 +65,16 @@ export const useEvents = () => {
     }
   }, []);
 
-  // Load events on component mount
+  // Load events on component mount and when user changes
   useEffect(() => {
-    loadEvents();
-  }, [loadEvents]);
+    if (user) {
+      loadEvents();
+    } else {
+      // Clear events when user logs out
+      setEvents([]);
+      setLoading(false);
+    }
+  }, [user, loadEvents]);
 
   return {
     events,
@@ -78,6 +86,8 @@ export const useEvents = () => {
     refreshEvents: loadEvents
   };
 };
+
+
 
 
 
