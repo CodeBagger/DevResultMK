@@ -44,10 +44,11 @@ This guide will help you set up Google OAuth authentication for your Scheduler A
    - Name: "Scheduler App Web Client"
    - **Authorized JavaScript origins**:
      - `http://localhost:3000` (for local development)
-     - `https://your-app.vercel.app` (your Vercel deployment URL)
+     - `https://devresult.com` (your production domain)
    - **Authorized redirect URIs**:
      - `https://your-project-id.supabase.co/auth/v1/callback`
      - You'll get this from Supabase in the next step
+     - **Important:** This is Supabase's callback URL, not your app URL
 
 6. **Copy Your Credentials**
    - After creating, you'll see a popup with:
@@ -135,18 +136,26 @@ If you haven't already deployed to Vercel:
 1. **Add Environment Variables in Vercel**:
    - Go to your Vercel project settings
    - Navigate to **Environment Variables**
-   - Ensure these are set:
-     - `REACT_APP_SUPABASE_URL`
-     - `REACT_APP_SUPABASE_ANON_KEY`
+   - Add these variables:
+     - `REACT_APP_SUPABASE_URL` - Your Supabase project URL
+     - `REACT_APP_SUPABASE_ANON_KEY` - Your Supabase anon key
+     - `REACT_APP_REDIRECT_URL` - Set to `https://devresult.com` (your production domain)
+       - **Important:** This ensures OAuth redirects go to your production domain, not localhost
 
-2. **Update Google OAuth Redirect URIs**:
+2. **Update Google OAuth Configuration**:
    - Go back to Google Cloud Console
-   - Add your production Vercel URL to **Authorized JavaScript origins**
-   - The Supabase redirect URI should already be there
+   - Go to **APIs & Services** → **Credentials**
+   - Click on your OAuth 2.0 Client ID
+   - In **Authorized JavaScript origins**, ensure you have:
+     - `https://devresult.com` (your production domain)
+     - `http://localhost:3000` (for local development, optional)
+   - The Supabase redirect URI (`https://your-project-id.supabase.co/auth/v1/callback`) should already be in **Authorized redirect URIs**
+   - Click **Save**
 
 3. **Redeploy**:
    - Push your code to GitHub
    - Vercel will automatically redeploy
+   - After deployment, test the Google login to ensure it redirects to `devresult.com`
 
 ## Troubleshooting
 
@@ -156,6 +165,15 @@ If you haven't already deployed to Vercel:
 - Make sure the Supabase redirect URI is added to Google Cloud Console
 - The redirect URI should be: `https://your-project-id.supabase.co/auth/v1/callback`
 - Check for typos in the URL
+- Verify `https://devresult.com` is in **Authorized JavaScript origins** in Google Cloud Console
+
+### Issue: Redirects to localhost instead of devresult.com
+
+**Solution**:
+- Make sure `REACT_APP_REDIRECT_URL=https://devresult.com` is set in Vercel environment variables
+- Verify the environment variable is set for **Production** environment in Vercel
+- Redeploy your application after adding the environment variable
+- Check that `https://devresult.com` is in Google Cloud Console's **Authorized JavaScript origins**
 
 ### Issue: "Invalid client" error
 
