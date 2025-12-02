@@ -59,10 +59,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       throw new Error('Supabase is not configured');
     }
 
-    // Determine the redirect URL
-    // Use environment variable if set, otherwise use current origin
-    // For production, set REACT_APP_REDIRECT_URL=https://devresult.com in Vercel
-    const redirectTo = process.env.REACT_APP_REDIRECT_URL || window.location.origin;
+    // Determine the redirect URL based on current hostname
+    // Check if we're on production domain, otherwise use current origin
+    const isProduction = window.location.hostname === 'devresult.com' || 
+                         window.location.hostname.endsWith('.devresult.com');
+    
+    const redirectTo = isProduction 
+      ? 'https://devresult.com'
+      : window.location.origin;
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
