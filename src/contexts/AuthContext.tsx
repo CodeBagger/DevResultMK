@@ -68,10 +68,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       ? 'https://devresult.com'
       : window.location.origin;
 
+    // Log for debugging (remove in production if needed)
+    console.log('OAuth redirect URL:', redirectTo);
+    console.log('Current hostname:', window.location.hostname);
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: redirectTo,
+        queryParams: {
+          redirect_to: redirectTo,
+        },
       },
     });
 

@@ -62,31 +62,40 @@ This guide will help you set up Google OAuth authentication for your Scheduler A
    - Visit [supabase.com](https://supabase.com)
    - Sign in and select your project
 
-2. **Navigate to Authentication Settings**
+2. **⚠️ IMPORTANT: Set Site URL First**
+   - Go to **Authentication** → **URL Configuration**
+   - Set **Site URL** to: `https://devresult.com`
+   - Add **Redirect URLs**:
+     - `https://devresult.com`
+     - `http://localhost:3000` (for local development)
+   - **This is critical!** The Site URL setting overrides the redirectTo parameter
+   - Click **Save**
+
+3. **Navigate to Authentication Settings**
    - Go to **Authentication** → **Providers**
    - Find **Google** in the list
    - Click to expand it
 
-3. **Enable Google Provider**
+4. **Enable Google Provider**
    - Toggle **Enable Google provider** to ON
 
-4. **Add Your Google Credentials**
+5. **Add Your Google Credentials**
    - **Client ID (for OAuth)**: Paste your Google Client ID
    - **Client Secret (for OAuth)**: Paste your Google Client Secret
 
-5. **Get Your Redirect URL**
+6. **Get Your Redirect URL**
    - Supabase will show you a redirect URL like:
      - `https://your-project-id.supabase.co/auth/v1/callback`
    - Copy this URL
 
-6. **Add Redirect URL to Google Cloud Console**
+7. **Add Redirect URL to Google Cloud Console**
    - Go back to Google Cloud Console
    - Go to **APIs & Services** → **Credentials**
    - Click on your OAuth 2.0 Client ID
    - Add the Supabase redirect URL to **Authorized redirect URIs**
    - Click **Save**
 
-7. **Save in Supabase**
+8. **Save in Supabase**
    - Click **Save** in the Supabase dashboard
 
 ## Step 3: Update Database Schema
@@ -170,10 +179,25 @@ If you haven't already deployed to Vercel:
 ### Issue: Redirects to localhost instead of devresult.com
 
 **Solution**:
-- Make sure `REACT_APP_REDIRECT_URL=https://devresult.com` is set in Vercel environment variables
-- Verify the environment variable is set for **Production** environment in Vercel
-- Redeploy your application after adding the environment variable
-- Check that `https://devresult.com` is in Google Cloud Console's **Authorized JavaScript origins**
+1. **Check Supabase Site URL Setting** (Most Important!):
+   - Go to Supabase Dashboard → **Authentication** → **URL Configuration**
+   - Set **Site URL** to: `https://devresult.com`
+   - Add `https://devresult.com` to **Redirect URLs** list
+   - Click **Save**
+   - This setting overrides the `redirectTo` parameter in code
+
+2. **Verify Google Cloud Console**:
+   - Ensure `https://devresult.com` is in **Authorized JavaScript origins**
+   - The Supabase callback URL should be in **Authorized redirect URIs**
+
+3. **Check Browser Console**:
+   - Open browser DevTools (F12)
+   - Look for the log message: "OAuth redirect URL: https://devresult.com"
+   - If it shows localhost, the hostname detection isn't working
+
+4. **Clear Browser Cache**:
+   - Clear cookies and cache for devresult.com
+   - Try incognito/private browsing mode
 
 ### Issue: "Invalid client" error
 
